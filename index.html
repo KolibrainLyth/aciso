@@ -9,6 +9,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -119,6 +120,15 @@
             color: #1a1a1a;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
+        
+        .cart-sidebar .cart-container {
+            position: static;
+            background: transparent;
+            box-shadow: none;
+            padding: 0;
+            margin: 0;
+            border: none;
+        }
 
         .category {
             margin-bottom: 20px;
@@ -127,6 +137,8 @@
             overflow: hidden;
             transition: all 0.2s ease;
             background: #ffffff;
+            will-change: transform;
+            transform: translateZ(0);
         }
 
         .category:hover {
@@ -145,6 +157,7 @@
             align-items: center;
             transition: all 0.2s ease;
             border-bottom: 1px solid #e5e5e5;
+            min-height: 44px;
         }
 
         .category-header:hover {
@@ -175,6 +188,7 @@
             max-height: 0;
             overflow: hidden;
             transition: all 0.3s ease;
+            will-change: max-height;
         }
 
         .category.expanded .category-content {
@@ -416,6 +430,7 @@
             cursor: pointer;
             transition: all 0.2s ease;
             letter-spacing: -0.01em;
+            min-height: 48px;
         }
 
         .checkout-btn:hover {
@@ -477,6 +492,7 @@
             font-size: 0.9rem;
             max-width: 300px;
             line-height: 1.4;
+            will-change: transform;
         }
 
         .notification.show {
@@ -537,6 +553,93 @@
             }
         }
 
+        @media (max-width: 375px) {
+            .container {
+                padding: 8px;
+                gap: 16px;
+            }
+
+            .header {
+                padding: 16px 0;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+                margin-bottom: 8px;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+
+            .main-content {
+                padding: 16px;
+            }
+
+            .cart-sidebar {
+                padding: 16px;
+            }
+
+            .category-header {
+                padding: 16px;
+            }
+
+            .category-title {
+                font-size: 0.95rem;
+            }
+
+            .category-description {
+                font-size: 0.85rem;
+            }
+
+            .skill-item {
+                padding: 12px;
+            }
+
+            .skill-text {
+                font-size: 0.8rem;
+            }
+
+            .price-tag {
+                font-size: 0.75rem;
+                padding: 4px 8px;
+            }
+
+            .cart-item {
+                padding: 12px;
+            }
+
+            .cart-item-title {
+                font-size: 0.9rem;
+            }
+
+            .cart-item-category {
+                font-size: 0.75rem;
+            }
+
+            .cart-item-price {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (hover: none) {
+            .skill-item {
+                min-height: 44px;
+            }
+
+            .category-header {
+                min-height: 44px;
+            }
+
+            .select-all-btn {
+                min-height: 44px;
+            }
+
+            .checkout-btn {
+                min-height: 48px;
+            }
+        }
+
         .price-tag {
             background: #333333;
             padding: 6px 12px;
@@ -551,6 +654,287 @@
         .skill-price {
             color: #ffffff;
             font-weight: 600;
+        }
+
+        .required-skill {
+            border-left: 4px solid #3b82f6;
+            background: #f0f9ff;
+            position: relative;
+        }
+
+        .required-skill:hover {
+            background: #e0f2fe;
+            cursor: pointer;
+        }
+
+        .required-skill.selected {
+            background: #dbeafe;
+            border-color: #2563eb;
+        }
+
+        .required-badge {
+            background: #e0f2fe;
+            color: #2563eb;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-left: 10px;
+            display: inline-block;
+            vertical-align: middle;
+            letter-spacing: 0.2px;
+            border: 1px solid #93c5fd;
+        }
+
+        .category-base-price {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .base-price-label {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .base-price-amount {
+            font-size: 1.1rem;
+            color: #059669;
+            font-weight: 700;
+        }
+
+        /* Improved animations */
+        .category-content {
+            transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .category.expanded .category-toggle {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .notification {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #1a1a1a;
+                color: #ffffff;
+            }
+
+            .category,
+            .cart-sidebar,
+            .main-content {
+                background: #2d2d2d;
+                border-color: #404040;
+            }
+
+            .category-header {
+                background: #333333;
+                color: #ffffff;
+            }
+
+            .skill-item {
+                background: #2d2d2d;
+                border-color: #404040;
+            }
+
+            .skill-item:hover {
+                background: #333333;
+            }
+
+            .cart-item {
+                background: #333333;
+                border-color: #404040;
+            }
+
+            .price-tag {
+                background: #404040;
+                border-color: #505050;
+            }
+
+            .notification {
+                background: #2d2d2d;
+                border-color: #404040;
+                color: #ffffff;
+            }
+        }
+
+        .cart-container {
+            position: sticky;
+            top: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .cart-container.has-items {
+            border: 1px solid #e0e0e0;
+        }
+        
+        .cart-category {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .cart-category:last-child {
+            border-bottom: none;
+        }
+        
+        .cart-category h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 1.1em;
+        }
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            margin: 5px 0;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+        
+        .cart-item.base-skill {
+            background: #f0f7ff;
+            border: 1px solid #cce5ff;
+        }
+        
+        .base-skill-badge {
+            font-size: 0.8em;
+            padding: 2px 6px;
+            background: #007bff;
+            color: white;
+            border-radius: 3px;
+            margin: 0 8px;
+        }
+
+        .included-skill {
+            background: #f9fafb;
+            margin-left: 20px;
+            padding: 8px 12px;
+            border-left: 3px solid #e5e7eb;
+        }
+
+        .included-skill .skill-name {
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        .included-skill .skill-price {
+            color: #9ca3af;
+        }
+        
+        .skill-name {
+            flex: 1;
+            margin-right: 10px;
+        }
+        
+        .skill-price {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .cart-discount {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            margin: 10px 0;
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            border-radius: 4px;
+            color: #856404;
+        }
+        
+        .discount-amount {
+            font-weight: 600;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        #cart-total {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #eee;
+            text-align: right;
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            .cart-container {
+                background: #1a1a1a;
+                border-color: #333;
+            }
+            
+            .cart-category {
+                border-color: #333;
+            }
+            
+            .cart-category h3 {
+                color: #fff;
+            }
+            
+            .cart-item {
+                background: #2a2a2a;
+            }
+            
+            .cart-item.base-skill {
+                background: #1a2733;
+                border-color: #234;
+            }
+
+            .included-skill {
+                background: #2a2a2a;
+                border-left-color: #555;
+            }
+
+            .included-skill .skill-name {
+                color: #999;
+            }
+
+            .included-skill .skill-price {
+                color: #777;
+            }
+            
+            .skill-price {
+                color: #89a;
+            }
+            
+            .cart-discount {
+                background: #332b1a;
+                border-color: #443322;
+                color: #bb9;
+            }
+            
+            .empty-cart {
+                color: #999;
+            }
+            
+            #cart-total {
+                border-color: #333;
+                color: #89a;
+            }
         }
     </style>
 </head>
@@ -570,21 +954,17 @@
         </div>
 
         <div class="cart-sidebar">
-            <div class="cart-title">Warenkorb</div>
-            <div id="discount-progress-container" class="discount-progress-container"></div>
-            <div id="cart-items" class="cart-items">
-                <div class="empty-cart">Noch keine Skills ausgewählt</div>
-            </div>
-            <div class="cart-summary">
-                <div id="cart-total" class="cart-total">
-                    <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 700;">
-                        <span>Gesamt:</span>
-                        <span>€0</span>
-                    </div>
+            <div class="cart-container">
+                <div class="cart-title">Warenkorb</div>
+                <div id="cart-content">
+                    <p class="empty-cart">Ihr Warenkorb ist leer</p>
                 </div>
-                <button id="checkout-btn" class="checkout-btn" disabled>
-                    Jetzt buchen
-                </button>
+                <div id="cart-total">€0</div>
+                <div class="cart-summary">
+                    <button id="checkout-btn" class="checkout-btn" disabled>
+                        Jetzt buchen
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -638,7 +1018,7 @@
                 ]
             },
             "SALES & MARKETING": {
-                description: "Verkauft mehr ohne dass Klaus verkaufen muss",
+                description: "Verkauft mehr ohne dass du verkaufen musst",
                 skills: [
                     "Leadmanagement: Alf richtet das Leadmanagement zur Überwachung und Steuerung des Fortschritts von Leads in Magicline ein.",
                     "Advanced Leadmanagement: Integrierte Kommunikationsplanung zur Anleitung von Mitarbeitern.",
@@ -664,84 +1044,208 @@
 
         // Pricing structure
         const skillPricing = {
-            "MAGICLINE-OPTIMIERUNG": 199,
-            "SUPPORT & HELPDESK": 149,
-            "MITGLIEDERBINDUNG": 179,
-            "SALES & MARKETING": 169,
-            "FINANCE & ANALYTICS": 159
+            "MAGICLINE-OPTIMIERUNG": 590,
+            "SUPPORT & HELPDESK": 590,
+            "MITGLIEDERBINDUNG": 590,
+            "SALES & MARKETING": 590,
+            "FINANCE & ANALYTICS": 590
+        };
+
+        // Additional skill pricing (per skill, excluding required skill)
+        const additionalSkillPricing = 99;
+
+        // Required skills for each category (must be selected if any skill from that category is selected)
+        const requiredSkills = {
+            "MAGICLINE-OPTIMIERUNG": "Automatisierte Mitgliedererfassung: Alf fügt neue Mitglieder nahtlos in Magicline ein, ohne menschliche Eingriffe.",
+            "SUPPORT & HELPDESK": "Ticket-basiertes Kundenfeedback-System: Alf verarbeitet Kundenmails automatisch und erstellt Support-Tickets.",
+            "MITGLIEDERBINDUNG": "Automatisiertes Kündigungsrückgewinnungs-Board: Alf richtet ein strukturiertes Management für eingehende Kündigungen in Magicline ein.",
+            "SALES & MARKETING": "Leadmanagement: Alf richtet das Leadmanagement zur Überwachung und Steuerung des Fortschritts von Leads in Magicline ein.",
+            "FINANCE & ANALYTICS": "KPI-Analysen: Alf wertet Kennzahlen zu Mitgliedern, Check-Ins, Verträgen, Finanzen und Aktivitäten aus."
         };
 
         let selectedSkills = new Set();
         let cartItems = [];
+        let total = 0;
+        const categoryTotals = {};
+        let currentNotificationTimeout;
 
         function generateSkillId(category, skill) {
-            // Create a more consistent ID by using the full skill text
-            const cleanSkill = skill.replace(/[^a-zA-Z0-9]/g, '');
+            // Create a more consistent ID by using the skill text
+            const cleanSkill = skill.replace(/[^a-zA-Z0-9äöüÄÖÜß]/g, '').substring(0, 50);
             return `${category}-${cleanSkill}`;
         }
 
         function createCategoryElement(category, data) {
             const categoryDiv = document.createElement('div');
             categoryDiv.className = 'category';
-            categoryDiv.innerHTML = `
-                <div class="category-header" onclick="toggleCategory(this.parentElement)">
+            categoryDiv.setAttribute('role', 'region');
+            categoryDiv.setAttribute('aria-label', category);
+            
+            const headerHtml = `
+                <div class="category-header" role="button" tabindex="0" aria-expanded="false" aria-controls="${category}-content">
                     <div>
                         <div class="category-title">${category}</div>
                         <div class="category-description">${data.description}</div>
                     </div>
-                    <div class="category-toggle">▼</div>
+                    <div class="category-toggle" aria-hidden="true">▼</div>
                 </div>
-                <div class="category-content">
-                    <button class="select-all-btn" onclick="toggleAllSkills('${category}', event)">
-                        Alle auswählen
-                    </button>
-                    ${data.skills.map(skill => `
-                        <div class="skill-item" onclick="toggleSkill('${category}', '${skill.replace(/'/g, "\\'")}')">
-                            <input type="checkbox" class="skill-checkbox" id="${generateSkillId(category, skill)}">
-                            <div class="skill-text">${skill}</div>
-                            <div class="price-tag">€${skillPricing[category]}</div>
-                        </div>
-                    `).join('')}
+                <div class="category-content" id="${category}-content" role="region" aria-hidden="true">
+                    <div class="category-base-price" role="text" aria-label="Kategorie Basispreis">
+                        <span class="base-price-label">Kategorie-Basis:</span>
+                        <span class="base-price-amount">€${skillPricing[category].toLocaleString('de-DE')}</span>
+                    </div>
+                    <button class="select-all-btn" role="button" aria-label="Alle Skills in dieser Kategorie auswählen">Alle auswählen</button>
+                    ${data.skills.map((skill, idx) => {
+                        const isRequired = requiredSkills[category] === skill;
+                        const skillId = generateSkillId(category, skill);
+                        return `
+                            <div class="skill-item ${isRequired ? 'required-skill' : ''}" 
+                                 role="checkbox" 
+                                 aria-checked="false"
+                                 tabindex="0"
+                                 aria-required="${isRequired}"
+                                 data-skill-id="${skillId}"
+                                 aria-label="${skill}${isRequired ? ' (Basis-Skill)' : ''}">
+                                <input type="checkbox" 
+                                       class="skill-checkbox" 
+                                       id="${skillId}" 
+                                       ${isRequired ? 'data-required-skill="true"' : ''}>
+                                <label for="${skillId}" class="skill-text">
+                                    ${skill}
+                                    ${isRequired ? '<span class="required-badge" role="note">Basis-Skill</span>' : ''}
+                                </label>
+                                <div class="price-tag" aria-label="Preis">${isRequired ? `€${skillPricing[category].toLocaleString('de-DE')}` : `€${additionalSkillPricing}`}</div>
+                            </div>
+                        `;
+                    }).join('')}
                 </div>
             `;
-            return categoryDiv;
-        }
-
-        function toggleCategory(categoryElement) {
-            categoryElement.classList.toggle('expanded');
-        }
-
-        function toggleSkill(category, skill) {
-            console.log('toggleSkill called with:', category, skill);
-            const skillId = generateSkillId(category, skill);
-            console.log('Generated skillId:', skillId);
-            const checkbox = document.getElementById(skillId);
-            const skillItem = checkbox.parentElement;
             
-            if (selectedSkills.has(skillId)) {
-                console.log('Removing skill:', skillId);
-                selectedSkills.delete(skillId);
-                skillItem.classList.remove('selected');
-                checkbox.checked = false;
-                // Only show notification for removal if more than 1 skill
-                if (selectedSkills.size > 0) {
-                    showNotification('Skill entfernt', 'error');
+            categoryDiv.innerHTML = headerHtml;
+            
+            // Add event listeners after DOM elements are created
+            const header = categoryDiv.querySelector('.category-header');
+            header.addEventListener('click', () => toggleCategory(categoryDiv));
+            header.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleCategory(categoryDiv);
                 }
-            } else {
-                console.log('Adding skill:', skillId);
+            });
+            
+            const selectAllBtn = categoryDiv.querySelector('.select-all-btn');
+            selectAllBtn.addEventListener('click', (event) => toggleAllSkills(category, event));
+            
+            const skillItems = categoryDiv.querySelectorAll('.skill-item');
+            skillItems.forEach(item => {
+                const checkbox = item.querySelector('.skill-checkbox');
+                const skillId = item.dataset.skillId;
+                const isRequired = checkbox.hasAttribute('data-required-skill');
+                
+                // Handle click and keyboard events on the skill item
+                item.addEventListener('click', (e) => {
+                    if (e.target !== checkbox) {
+                        e.preventDefault();
+                        checkbox.click();
+                    }
+                });
+                
+                item.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        checkbox.click();
+                    }
+                });
+                
+                        checkbox.addEventListener('change', () => {
+            const skillText = item.querySelector('.skill-text').textContent.trim();
+            console.log('Skill checkbox changed:', category, skillText, 'ID:', skillId, 'Checked:', checkbox.checked);
+            
+            // Direkt die selectedSkills aktualisieren ohne toggleSkill aufzurufen
+            if (checkbox.checked) {
                 selectedSkills.add(skillId);
-                skillItem.classList.add('selected');
-                checkbox.checked = true;
-                // Only show notification for addition if it's not the first skill
+                item.classList.add('selected');
+                item.setAttribute('aria-checked', 'true');
+                console.log('Added skill, selectedSkills now:', Array.from(selectedSkills));
                 if (selectedSkills.size > 1) {
                     showNotification('Skill hinzugefügt', 'success');
                 }
+            } else {
+                // Prüfung für Basis-Skills
+                const isRequired = checkbox.hasAttribute('data-required-skill');
+                if (isRequired) {
+                    const hasOtherSkillsFromCategory = Array.from(selectedSkills).some(selectedId => {
+                        const [selectedCategory] = selectedId.split('-');
+                        return selectedCategory === category && selectedId !== skillId;
+                    });
+                    
+                    if (hasOtherSkillsFromCategory) {
+                        showNotification('Entferne zuerst die anderen Skills dieser Kategorie', 'error');
+                        checkbox.checked = true;
+                        return;
+                    }
+                }
+                
+                selectedSkills.delete(skillId);
+                item.classList.remove('selected');
+                item.setAttribute('aria-checked', 'false');
+                console.log('Removed skill, selectedSkills now:', Array.from(selectedSkills));
+                if (selectedSkills.size > 0) {
+                    showNotification('Skill entfernt', 'error');
+                }
             }
             
-            console.log('Selected skills after toggle:', selectedSkills);
             updateCart();
             updateSelectAllButton(category);
+        });
+            });
+            
+            return categoryDiv;
         }
+
+        // Debounce helper function
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Throttle helper function
+        function throttle(func, limit) {
+            let inThrottle;
+            return function(...args) {
+                if (!inThrottle) {
+                    func.apply(this, args);
+                    inThrottle = true;
+                    setTimeout(() => inThrottle = false, limit);
+                }
+            };
+        }
+
+        // Optimized category expansion
+        function toggleCategory(categoryElement) {
+            const isExpanded = categoryElement.classList.contains('expanded');
+            const header = categoryElement.querySelector('.category-header');
+            const content = categoryElement.querySelector('.category-content');
+            
+            requestAnimationFrame(() => {
+                categoryElement.classList.toggle('expanded');
+                header.setAttribute('aria-expanded', !isExpanded);
+                content.setAttribute('aria-hidden', isExpanded);
+            });
+        }
+
+        // Optimized cart update
+        const debouncedUpdateCart = debounce(updateCart, 150);
+
+        // Optimized skill toggle
+
 
         function toggleAllSkills(category, event) {
             event.stopPropagation();
@@ -811,221 +1315,212 @@
             }
         }
 
+        function updateRequiredSkillVisuals() {
+            console.log('updateRequiredSkillVisuals called');
+            // Update visual state of required skills based on other selected skills in their category
+            Object.entries(requiredSkills).forEach(([category, requiredSkill]) => {
+                const requiredSkillId = generateSkillId(category, requiredSkill);
+                console.log(`Checking required skill for ${category}:`, requiredSkillId);
+                const requiredSkillElement = document.getElementById(requiredSkillId);
+                console.log('Found element:', requiredSkillElement);
+                
+                if (requiredSkillElement) {
+                    const skillItem = requiredSkillElement.parentElement;
+                    // Check if other skills from this category are selected
+                    const hasOtherSkillsFromCategory = Array.from(selectedSkills).some(selectedId => {
+                        const [selectedCategory] = selectedId.split('-');
+                        return selectedCategory === category && selectedId !== requiredSkillId;
+                    });
+                    
+                    console.log(`Has other skills from ${category}:`, hasOtherSkillsFromCategory);
+                    console.log(`Required skill selected:`, selectedSkills.has(requiredSkillId));
+                    
+                    if (hasOtherSkillsFromCategory && selectedSkills.has(requiredSkillId)) {
+                        // Lock the required skill if other skills from category are selected
+                        console.log(`Locking required skill for ${category}`);
+                        skillItem.classList.add('locked');
+                        requiredSkillElement.disabled = true;
+                    } else if (!hasOtherSkillsFromCategory && selectedSkills.has(requiredSkillId)) {
+                        // Unlock the required skill only if no other skills from category are selected
+                        console.log(`Unlocking required skill for ${category}`);
+                        skillItem.classList.remove('locked');
+                        requiredSkillElement.disabled = false;
+                    } else {
+                        // Keep disabled if not selected
+                        console.log(`Keeping required skill disabled for ${category}`);
+                        skillItem.classList.remove('locked');
+                        requiredSkillElement.disabled = true;
+                    }
+                } else {
+                    console.log(`Required skill element not found for ${category}:`, requiredSkillId);
+                }
+            });
+        }
+
         function updateCart() {
-            console.log('updateCart called');
-            console.log('selectedSkills:', selectedSkills);
-            console.log('selectedSkills.size:', selectedSkills.size);
-            
-            const cartItemsContainer = document.getElementById('cart-items');
-            const cartTotalElement = document.getElementById('cart-total');
+            const cartContent = document.getElementById('cart-content');
+            const cartTotal = document.getElementById('cart-total');
+            const cartContainer = document.querySelector('.cart-container');
             const checkoutBtn = document.getElementById('checkout-btn');
             
-            cartItems = [];
-            let total = 0;
+            if (selectedSkills.size === 0) {
+                cartContent.innerHTML = '<p class="empty-cart">Ihr Warenkorb ist leer</p>';
+                cartTotal.textContent = '€0';
+                if (cartContainer) cartContainer.classList.remove('has-items');
+                if (checkoutBtn) checkoutBtn.disabled = true;
+                return;
+            }
+            
+            if (cartContainer) cartContainer.classList.add('has-items');
+            if (checkoutBtn) checkoutBtn.disabled = false;
+            
+            // Sammle Skills nach Kategorien und berechne Preise korrekt
+            const categorizedSkills = {};
+            const categoryPrices = {};
+            let totalPrice = 0;
             
             selectedSkills.forEach(skillId => {
                 console.log('Processing skillId:', skillId);
-                const [category, skillName] = skillId.split('-');
-                console.log('Split category:', category, 'skillName:', skillName);
                 
-                // Find the full category name
-                const fullCategory = Object.keys(skillCategories).find(cat => cat.startsWith(category));
-                console.log('Found fullCategory:', fullCategory);
+                // Versuche alle Kategorien um das richtige Match zu finden
+                let foundCategory = null;
+                let foundSkill = null;
                 
-                if (fullCategory) {
-                    // Find the skill by matching the generated ID
-                    const skill = skillCategories[fullCategory].skills.find(s => {
-                        const generatedId = generateSkillId(fullCategory, s);
-                        console.log('Comparing:', generatedId, 'with:', skillId);
-                        return generatedId === skillId;
-                    });
-                    
-                    console.log('Found skill:', skill);
-                    
-                    if (skill) {
-                        cartItems.push({
-                            category: fullCategory,
-                            skill: skill,
-                            price: skillPricing[fullCategory]
-                        });
-                        total += skillPricing[fullCategory];
-                        console.log('Added to cart:', fullCategory, skill.substring(0, 50) + '...', skillPricing[fullCategory]);
+                for (const [categoryName, categoryData] of Object.entries(skillCategories)) {
+                    for (const skill of categoryData.skills) {
+                        const generatedId = generateSkillId(categoryName, skill);
+                        if (generatedId === skillId) {
+                            foundCategory = categoryName;
+                            foundSkill = skill;
+                            break;
+                        }
                     }
+                    if (foundCategory) break;
+                }
+                
+                console.log('Found category:', foundCategory, 'skill:', foundSkill);
+                
+                if (foundCategory && foundSkill) {
+                    if (!categorizedSkills[foundCategory]) {
+                        categorizedSkills[foundCategory] = {
+                            baseSkill: null,
+                            additionalSkills: [],
+                            hasAnySkill: false
+                        };
+                        categoryPrices[foundCategory] = 0;
+                    }
+                    
+                    categorizedSkills[foundCategory].hasAnySkill = true;
+                    
+                    const checkbox = document.getElementById(skillId);
+                    const isRequired = checkbox && checkbox.hasAttribute('data-required-skill');
+                    
+                    if (isRequired) {
+                        categorizedSkills[foundCategory].baseSkill = foundSkill;
+                    } else {
+                        categorizedSkills[foundCategory].additionalSkills.push(foundSkill);
+                    }
+                } else {
+                    console.error('Could not find category/skill for ID:', skillId);
                 }
             });
             
-            // Calculate discount: 5% for every 5 skills (cumulative)
+            // Berechne Preise pro Kategorie
+            Object.entries(categorizedSkills).forEach(([category, skills]) => {
+                if (skills.hasAnySkill) {
+                    // Jede Kategorie mit mindestens einem Skill kostet den Basispreis
+                    categoryPrices[category] = skillPricing[category];
+                    totalPrice += skillPricing[category];
+                    
+                    // Plus zusätzliche Skills
+                    const additionalPrice = skills.additionalSkills.length * additionalSkillPricing;
+                    categoryPrices[category] += additionalPrice;
+                    totalPrice += additionalPrice;
+                }
+            });
+            
+            // Berechne Rabatt (5% pro 5 Skills auf den Gesamtpreis)
             const discountGroups = Math.floor(selectedSkills.size / 5);
+            const discountAmount = totalPrice * (discountGroups * 0.05);
+            const finalPrice = totalPrice - discountAmount;
             
-            if (cartItems.length === 0) {
-                cartItemsContainer.innerHTML = '<div class="empty-cart">Noch keine Skills ausgewählt</div>';
-            } else {
-                // Group items by category
-                const groupedItems = {};
-                cartItems.forEach(item => {
-                    if (!groupedItems[item.category]) {
-                        groupedItems[item.category] = [];
-                    }
-                    groupedItems[item.category].push(item);
-                });
-                
-                // Generate HTML for grouped items
-                const groupedHTML = Object.entries(groupedItems).map(([category, items]) => {
-                    const categoryTotal = items.reduce((sum, item) => sum + item.price, 0);
-                    return `
-                        <div class="cart-category-group">
-                            <div class="cart-category-header">
-                                <span>${category}</span>
-                                <span class="cart-category-count">${items.length}</span>
-                            </div>
-                            ${items.map((item, index) => {
-                                const isInDiscountGroup = Math.floor(index / 5) < discountGroups;
-                                const originalPrice = item.price;
-                                const discountedPrice = isInDiscountGroup ? originalPrice * 0.95 : originalPrice;
-                                
-                                return `
-                                    <div class="cart-item">
-                                        <div class="cart-item-info">
-                                            <div class="cart-item-title">${item.skill.split(':')[0]}</div>
-                                            <div class="cart-item-category">${item.category}</div>
-                                        </div>
-                                        <div class="cart-item-price">
-                                            ${isInDiscountGroup ? 
-                                                `<span class="original-price">€${originalPrice.toLocaleString('de-DE')}</span>` : 
-                                                ''
-                                            }
-                                            <span class="final-price">€${Math.round(discountedPrice).toLocaleString('de-DE')}</span>
-                                        </div>
-                                    </div>
-                                `;
-                            }).join('')}
-                        </div>
-                    `;
-                }).join('');
-                
-                cartItemsContainer.innerHTML = groupedHTML;
-            }
+            // Generiere HTML für den Warenkorb
+            let cartHtml = '';
             
-            // Calculate discount based on the actual prices of the selected skills
-            let discount = 0;
-            if (discountGroups > 0) {
-                // Get the actual prices of selected skills
-                const skillPrices = [];
-                selectedSkills.forEach(skillId => {
-                    const [category, skillName] = skillId.split('-');
-                    const fullCategory = Object.keys(skillCategories).find(cat => cat.startsWith(category));
-                    if (fullCategory) {
-                        skillPrices.push(skillPricing[fullCategory]);
+            Object.entries(categorizedSkills).forEach(([category, skills]) => {
+                if (skills.hasAnySkill) {
+                    cartHtml += `<div class="cart-category">
+                        <h3>${category}</h3>`;
+                    
+                    // Zeige Kategorie-Basis mit enthaltenem Basis-Skill
+                    const baseSkillName = skills.baseSkill ? skills.baseSkill : 'Basis-Funktionen';
+                    cartHtml += `
+                        <div class="cart-item base-skill">
+                            <span class="skill-name">Kategorie-Basis</span>
+                            <span class="base-skill-badge">Basis-Preis</span>
+                            <span class="skill-price">€${skillPricing[category].toLocaleString('de-DE')}</span>
+                        </div>`;
+                    
+                    // Zeige enthaltenen Basis-Skill nur wenn vorhanden
+                    if (skills.baseSkill) {
+                        cartHtml += `
+                            <div class="cart-item included-skill">
+                                <span class="skill-name">${baseSkillName} (enthalten)</span>
+                                <span class="skill-price">€0</span>
+                            </div>`;
                     }
-                });
-                
-                // Sort prices to get the most expensive skills for discount
-                skillPrices.sort((a, b) => b - a);
-                
-                // Calculate discount for each group of 5 skills
-                for (let i = 0; i < discountGroups; i++) {
-                    const startIndex = i * 5;
-                    const endIndex = Math.min(startIndex + 5, skillPrices.length);
-                    const groupTotal = skillPrices.slice(startIndex, endIndex).reduce((sum, price) => sum + price, 0);
-                    discount += groupTotal * 0.05;
+                    
+                    // Zeige zusätzliche Skills
+                    skills.additionalSkills.forEach(skill => {
+                        cartHtml += `
+                            <div class="cart-item">
+                                <span class="skill-name">${skill.split(':')[0]}</span>
+                                <span class="skill-price">€${additionalSkillPricing}</span>
+                            </div>`;
+                    });
+                    
+                    cartHtml += '</div>';
                 }
-            }
+            });
             
-            const finalTotal = total - discount;
-            
-            console.log('Debug discount calculation:');
-            console.log('- Selected skills:', selectedSkills.size);
-            console.log('- Total before discount:', total);
-            console.log('- Discount groups:', discountGroups);
-            console.log('- Discount amount:', discount);
-            console.log('- Final total:', finalTotal);
-            
-            console.log('Selected skills:', selectedSkills.size);
-            console.log('Discount groups (every 5 skills):', discountGroups);
-            console.log('Total before discount:', total);
-            console.log('Discount:', discount);
-            console.log('Final total:', finalTotal);
-            
-            // Update total display
-            const nextDiscountThreshold = Math.ceil(selectedSkills.size / 5) * 5;
-            const skillsToNextDiscount = nextDiscountThreshold - selectedSkills.size;
-            
-            console.log('Progress calculation:');
-            console.log('- Selected skills:', selectedSkills.size);
-            console.log('- Current discount groups:', discountGroups);
-            console.log('- Next threshold:', nextDiscountThreshold);
-            console.log('- Skills to next discount:', skillsToNextDiscount);
-            
-            // Update discount progress container
-            const discountProgressContainer = document.getElementById('discount-progress-container');
-            
-            if (discount > 0) {
-                cartTotalElement.innerHTML = `
-                    <div class="cart-subtotal">
-                        <span>Zwischensumme:</span>
-                        <span>€${total.toLocaleString('de-DE')}</span>
-                    </div>
+            if (discountAmount > 0) {
+                cartHtml += `
                     <div class="cart-discount">
-                        <span class="cart-discount-text">Rabatt (${discountGroups} × 5 Skills = ${discountGroups * 5} Skills):</span>
-                        <span class="cart-discount-amount">-€${Math.round(discount).toLocaleString('de-DE')}</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 700; margin-top: 12px;">
-                        <span>Gesamt:</span>
-                        <span>€${Math.round(finalTotal).toLocaleString('de-DE')}</span>
-                    </div>
-                `;
-                
-                // Show progress for next discount level if there are skills to next threshold
-                if (skillsToNextDiscount > 0) {
-                    discountProgressContainer.innerHTML = `
-                        <div class="discount-progress">
-                            <div class="discount-progress-text">
-                                🎯 Noch ${skillsToNextDiscount} Skill${skillsToNextDiscount > 1 ? 's' : ''} für ${discountGroups + 1} × 5% Rabatt!
-                            </div>
-                            <div class="discount-progress-bar">
-                                <div class="discount-progress-fill" style="width: ${(selectedSkills.size % 5) * 20}%"></div>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    discountProgressContainer.innerHTML = '';
-                }
-            } else {
-                cartTotalElement.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 700;">
-                        <span>Gesamt:</span>
-                        <span>€${total.toLocaleString('de-DE')}</span>
-                    </div>
-                `;
-                discountProgressContainer.innerHTML = `
-                    <div class="discount-progress">
-                        <div class="discount-progress-text">
-                            ${skillsToNextDiscount > 0 
-                                ? `🎯 Noch ${skillsToNextDiscount} Skill${skillsToNextDiscount > 1 ? 's' : ''} für ${discountGroups + 1} × 5% Rabatt!` 
-                                : '🎉 Nächster Rabatt erreicht!'
-                            }
-                        </div>
-                        <div class="discount-progress-bar">
-                            <div class="discount-progress-fill" style="width: ${(selectedSkills.size % 5) * 20}%"></div>
-                        </div>
-                    </div>
-                `;
+                        <span>Rabatt (${discountGroups} × 5% = ${discountGroups * 5}%)</span>
+                        <span class="discount-amount">-€${Math.round(discountAmount).toLocaleString('de-DE')}</span>
+                    </div>`;
             }
             
-            checkoutBtn.disabled = cartItems.length === 0;
+            if (cartContent) cartContent.innerHTML = cartHtml;
+            if (cartTotal) cartTotal.textContent = `€${Math.round(finalPrice).toLocaleString('de-DE')}`;
         }
 
-        function showNotification(message, type = 'success') {
+        // Optimized notification system
+        const showNotification = throttle((message, type = 'success') => {
             const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.className = `notification ${type}`;
-            notification.classList.add('show');
             
-            // Auto-hide after 2 seconds
-            setTimeout(() => {
+            if (currentNotificationTimeout) {
+                clearTimeout(currentNotificationTimeout);
+            }
+            
+            requestAnimationFrame(() => {
                 notification.classList.remove('show');
+                void notification.offsetWidth;
+                
+                notification.textContent = message;
+                notification.className = `notification ${type}`;
+                notification.setAttribute('role', 'alert');
+                notification.setAttribute('aria-live', 'polite');
+                notification.classList.add('show');
+            });
+            
+            currentNotificationTimeout = setTimeout(() => {
+                requestAnimationFrame(() => {
+                    notification.classList.remove('show');
+                });
+                currentNotificationTimeout = null;
             }, 2000);
-        }
+        }, 300);
 
         function checkout() {
             if (cartItems.length === 0) return;
@@ -1057,26 +1552,38 @@
             });
         }
 
-        // Initialize the page
+        // Initialize with performance optimizations
         function init() {
             const categoriesContainer = document.getElementById('skill-categories');
             
+            // Create a document fragment to minimize reflows
+            const fragment = document.createDocumentFragment();
+            
             Object.entries(skillCategories).forEach(([category, data]) => {
                 const categoryElement = createCategoryElement(category, data);
-                categoriesContainer.appendChild(categoryElement);
+                fragment.appendChild(categoryElement);
             });
             
-            // Expand first category by default
-            const firstCategory = categoriesContainer.firstElementChild;
-            if (firstCategory) {
-                firstCategory.classList.add('expanded');
-            }
+            // Append all categories at once
+            categoriesContainer.appendChild(fragment);
+            
+            // Expand first category after a frame
+            requestAnimationFrame(() => {
+                const firstCategory = categoriesContainer.firstElementChild;
+                if (firstCategory) {
+                    firstCategory.classList.add('expanded');
+                    const header = firstCategory.querySelector('.category-header');
+                    const content = firstCategory.querySelector('.category-content');
+                    header.setAttribute('aria-expanded', 'true');
+                    content.setAttribute('aria-hidden', 'false');
+                }
+            });
             
             document.getElementById('checkout-btn').addEventListener('click', checkout);
         }
 
         // Start the application
-        init();
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html> 
