@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALF Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 16px;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 32px;
+            min-height: 100vh;
+        }
+
+        .header {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-bottom: 32px;
+            padding: 32px 0;
+        }
+
+        .header h1 {
+            color: #1a1a1a;
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+        }
+
+        .select-all-btn {
+            background: #3b82f6;
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 16px;
+        }
+
+        .select-all-btn:hover {
+            background: #2563eb;
+        }
+
+        .select-all-btn.selected {
+            background: #dc2626;
+        }
+
+        .select-all-btn.selected:hover {
+            background: #b91c1c;
+        }
+
+        .header p {
+            color: #666666;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: 400;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 12px;
+        }
+
+        .logo-img {
+            width: 40px;
+            height: auto;
+            border-radius: 8px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: -0.02em;
+        }
+
+        .main-content {
+            background: #ffffff;
+            border: 1px solid #e5e5e5;
+            border-radius: 12px;
+            padding: 24px;
+            height: fit-content;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-sidebar {
+            background: #ffffff;
+            border: 1px solid #e5e5e5;
+            border-radius: 12px;
+            padding: 28px;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+            color: #1a1a1a;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .category {
+            margin-bottom: 20px;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+            background: #ffffff;
+        }
+
+        .category:hover {
+            border-color: #d1d5db;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-header {
+            background: #f9fafb;
+            color: #1a1a1a;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .category-header:hover {
+            background: #f3f4f6;
+        }
+
+        .category-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        .category-description {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-top: 4px;
+            font-weight: 400;
+        }
+
+        .category-toggle {
+            font-size: 1.2rem;
+            transition: transform 0.2s ease;
+            color: #9ca3af;
+        }
+
+        .category-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .category.expanded .category-content {
+            padding: 20px;
+            max-height: 2000px;
+        }
+
+        .category.expanded .category-toggle {
+            transform: rotate(180deg);
+        }
+
+        .skill-item {
+            display: flex;
+            align-items: center;
+            padding: 14px;
+            margin-bottom: 6px;
+            background: #ffffff;
+            border-radius: 6px;
+            border: 1px solid #e5e5e5;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .skill-item:hover {
+            background: #f9fafb;
+            border-color: #d1d5db;
+        }
+
+        .skill-item.selected {
+            background: #f0f9ff;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 1px #3b82f6;
+        }
+
+        .skill-checkbox {
+            width: 18px;
+            height: 18px;
+            margin-right: 16px;
+            accent-color: #3b82f6;
+            border-radius: 3px;
+        }
+
+        .skill-text {
+            flex: 1;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            color: #374151;
+        }
+
+        .cart-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            text-align: center;
+            letter-spacing: -0.01em;
+            color: #1a1a1a;
+        }
+
+        .cart-items {
+            margin-bottom: 24px;
+        }
+
+        .cart-item {
+            background: #f9fafb;
+            padding: 16px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            border: 1px solid #e5e5e5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #1a1a1a;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .cart-item-category {
+            font-size: 0.8rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .cart-item-price {
+            font-weight: 700;
+            color: #3b82f6;
+            font-size: 1rem;
+            margin-left: 16px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
+            min-width: 80px;
+            justify-content: flex-end;
+        }
+
+        .original-price {
+            font-size: 0.8rem;
+            color: #9ca3af;
+            text-decoration: line-through;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .final-price {
+            color: #3b82f6;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .cart-category-group {
+            margin-bottom: 16px;
+        }
+
+        .cart-category-header {
+            background: #f3f4f6;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #374151;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-category-count {
+            background: #3b82f6;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .cart-summary {
+            border-top: 2px solid #e5e5e5;
+            padding-top: 24px;
+            margin-top: 24px;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #1a1a1a;
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 6px;
+            border: 1px solid #e5e5e5;
+        }
+
+        .cart-discount {
+            background: #dcfce7;
+            border: 1px solid #22c55e;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-discount-text {
+            color: #166534;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .cart-discount-amount {
+            color: #22c55e;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .discount-progress-container {
+            margin-bottom: 16px;
+        }
+
+        .discount-progress {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border: 1px solid #3b82f6;
+            border-radius: 8px;
+            padding: 12px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .discount-progress-text {
+            color: white;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            text-align: center;
+            line-height: 1.3;
+            font-weight: 600;
+        }
+
+        .discount-progress-bar {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+        }
+
+        .discount-progress-fill {
+            background: linear-gradient(90deg, #ffffff, #fbbf24);
+            height: 100%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+        }
+
+        .cart-subtotal {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #6b7280;
+            padding: 8px 0;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: #3b82f6;
+            color: #ffffff;
+            border: none;
+            padding: 16px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            letter-spacing: -0.01em;
+        }
+
+        .checkout-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .checkout-btn:disabled {
+            background: #9ca3af;
+            color: #6b7280;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .empty-cart {
+            text-align: center;
+            color: #9ca3af;
+            font-style: italic;
+            padding: 32px 0;
+            background: #f9fafb;
+            border-radius: 6px;
+            border: 1px solid #e5e5e5;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding: 20px 0;
+            border-top: 1px solid #e5e5e5;
+            background: #f9fafb;
+        }
+
+        .footer-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 16px;
+            text-align: center;
+        }
+
+        .footer p {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ffffff;
+            color: #1a1a1a;
+            padding: 12px 16px;
+            border-radius: 6px;
+            border: 1px solid #e5e5e5;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            font-weight: 500;
+            font-size: 0.9rem;
+            max-width: 300px;
+            line-height: 1.4;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: #f0fdf4;
+            border-color: #22c55e;
+            color: #166534;
+        }
+
+        .notification.error {
+            background: #fef2f2;
+            border-color: #ef4444;
+            color: #dc2626;
+        }
+
+        .notification.info {
+            background: #eff6ff;
+            border-color: #3b82f6;
+            color: #1d4ed8;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .cart-sidebar {
+                position: static;
+                order: -1;
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .main-content {
+                padding: 24px;
+            }
+
+            .category-header {
+                padding: 20px;
+            }
+
+            .category-title {
+                font-size: 1rem;
+            }
+
+            .skill-item {
+                padding: 14px;
+            }
+
+            .skill-text {
+                font-size: 0.85rem;
+            }
+        }
+
+        .price-tag {
+            background: #333333;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 12px;
+            color: #ffffff;
+            border: 1px solid #666666;
+        }
+
+        .skill-price {
+            color: #ffffff;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="4yJWX6TaZj9J.jpeg" alt="KOLIBRAIN Logo" class="logo-img">
+                <span class="logo-text"></span>
+            </div>
+            <h1>ALF Generator</h1>
+            <p>Wähle die Skills aus, die Alf für dein Fitnessstudio benötigt</p>
+        </div>
+
+        <div class="main-content">
+            <div id="skill-categories"></div>
+        </div>
+
+        <div class="cart-sidebar">
+            <div class="cart-title">Warenkorb</div>
+            <div id="discount-progress-container" class="discount-progress-container"></div>
+            <div id="cart-items" class="cart-items">
+                <div class="empty-cart">Noch keine Skills ausgewählt</div>
+            </div>
+            <div class="cart-summary">
+                <div class="cart-total">
+                    <span>Gesamt:</span>
+                    <span id="cart-total">€0</span>
+                </div>
+                <button id="checkout-btn" class="checkout-btn" disabled>
+                    Jetzt buchen
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 KOLIBRAIN™. Alle Rechte vorbehalten.</p>
+        </div>
+    </footer>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        const skillCategories = {
+            "MAGICLINE-OPTIMIERUNG": {
+                description: "Hol endlich alles aus deiner Magicline-Investition raus",
+                skills: [
+                    "Newsletter-Automation: Alf setzt Parameter und löst den Versand vorbereiteter Newsletter in Magicline automatisch aus.",
+                    "Automatisierte Mitgliedererfassung: Alf fügt neue Mitglieder nahtlos in Magicline ein, ohne menschliche Eingriffe.",
+                    "Kündigungsverarbeitung: Alf bestätigt über mySports eingereichte Kündigungen direkt in Magicline, eliminiert manuelle Prozesse.",
+                    "Stilllegungsverarbeitung: Alf bestätigt Stilllegungen in Magicline, reduziert manuellen Aufwand.",
+                    "Proaktives Mahnwesen: Alf initiiert Mahnverfahren bei ausstehenden Beiträgen in Magicline.",
+                    "Berechtigungswesen: Alf automatisiert die Einrichtung von Benutzerrechten für Rollen in Magicline selbstständig und sicher.",
+                    "Studio-Website-Integration: Alf automatisiert die Einrichtung der Studio-Website in Magicline.",
+                    "KPI-Analysen: Alf wertet Kennzahlen zu Mitgliedern, Check-Ins, Verträgen, Finanzen und Aktivitäten aus.",
+                    "Automatisiertes Reporting: Alf generiert Auswertungen zu Mitgliederbewegungen für einen kontinuierlichen Überblick.",
+                    "Qualitätsmanagement: Alf hält Mitgliederdaten kontinuierlich aktuell und geprüft."
+                ]
+            },
+            "SUPPORT & HELPDESK": {
+                description: "Professioneller Kundensupport auf Autopilot",
+                skills: [
+                    "Ticket-basiertes Kundenfeedback-System: Alf verarbeitet Kundenmails automatisch und erstellt Support-Tickets.",
+                    "Automatisiertes E-Mail-Response-System: Alf antwortet zeitnah auf Mitgliederanfragen ohne manuellen Eingriff.",
+                    "Mail-Integrationssystem: Alf erfasst eingehende Kündigungen direkt in Magicline.",
+                    "Website-Chatbot: Alf beantwortet Kundenfragen automatisch auf der Website.",
+                    "Chatbot-basierte Abfragesysteme: Automatisierte Beantwortung fachlicher Fragestellungen durch Analyse des Datenbestands.",
+                    "Individuelle Push-Benachrichtigungen: Alf sendet zielgerichtete Benachrichtigungen über die MySports-App."
+                ]
+            },
+            "MITGLIEDERBINDUNG": {
+                description: "Verhindert Kündigungen bevor sie passieren",
+                skills: [
+                    "Automatisiertes Kündigungsrückgewinnungs-Board: Alf richtet ein strukturiertes Management für eingehende Kündigungen in Magicline ein.",
+                    "Mitglieder-Inaktivitätsanalyse: Alf identifiziert inaktive Mitglieder und initiiert gezielte Reaktivierungsmaßnahmen.",
+                    "Automatisches Rückgewinnungssystem: Alf identifiziert gekündigte Mitglieder und schlägt gezielte Rückgewinnungsaktionen vor.",
+                    "Service-Call-Automation: Alf erinnert automatisch an Nachfassanrufe nach Mitgliedschaftsabschlüssen.",
+                    "Mitgliederbetreuungsautomatisierung: Systemgestützte Koordination von Mitglieder-Aufgaben wie Check-Up Terminvereinbarungen.",
+                    "Zufriedenheits-Tracking: Alf führt automatische Umfragen nach Käufen oder Trainings durch.",
+                    "Trainingsanalyse: Alf analysiert das Trainingsverhalten und die -frequenz der Mitglieder.",
+                    "Treueprogramm-Management: Alf belohnt engagierte Mitglieder mit maßgeschneiderten Bonusaktionen."
+                ]
+            },
+            "SALES & MARKETING": {
+                description: "Verkauft mehr ohne dass Klaus verkaufen muss",
+                skills: [
+                    "Leadmanagement: Alf richtet das Leadmanagement zur Überwachung und Steuerung des Fortschritts von Leads in Magicline ein.",
+                    "Advanced Leadmanagement: Integrierte Kommunikationsplanung zur Anleitung von Mitarbeitern.",
+                    "Digitale Mitgliederkommunikation: Alf versendet elektronische Mitgliederbriefe ohne Portokosten direkt über Magicline.",
+                    "Co-Pilot für Landingpages: Alf automatisiert die Erstellung von Landingpages für Marketingaktionen basierend auf vorgegebenen Daten.",
+                    "Zielgruppenspezifische Marketing-Automation: Alf passt Marketingaktionen individuell an Kundensegmente an.",
+                    "Freunde-Werben-Freunde: Alf richtet das Empfehlungsprogramm für Mitglieder automatisiert ein.",
+                    "Netzwerkanalytik für Bring-a-Friend-Kampagnen: Alf erkennt Muster in Community-Interaktionen."
+                ]
+            },
+            "FINANCE & ANALYTICS": {
+                description: "Automatisierte Buchhaltung und intelligente Analysen",
+                skills: [
+                    "Automatische Beitragszuordnung: Alf ordnet eingehende Beiträge basierend auf Mustern automatisch zu.",
+                    "Intelligentes Bestandsmanagement: Alf überwacht und steuert den Bestand und löst bei Bedarf Bestellanfragen proaktiv aus.",
+                    "Verkaufsanalytik: Detaillierte Analyse von F&B-Verkaufszahlen zur Erkennung von Trends und Optimierung des Sortiments.",
+                    "Echtzeitanalyse von Verkaufsempfehlungen: Alf gibt basierend auf Mitgliedsvorlieben F&B-Empfehlungen."
+                ]
+            }
+        };
+
+        // Pricing structure
+        const skillPricing = {
+            "MAGICLINE-OPTIMIERUNG": 199,
+            "SUPPORT & HELPDESK": 149,
+            "MITGLIEDERBINDUNG": 179,
+            "SALES & MARKETING": 169,
+            "FINANCE & ANALYTICS": 159
+        };
+
+        let selectedSkills = new Set();
+        let cartItems = [];
+
+        function generateSkillId(category, skill) {
+            return `${category}-${skill.substring(0, 20).replace(/[^a-zA-Z0-9]/g, '')}`;
+        }
+
+        function createCategoryElement(category, data) {
+            const categoryDiv = document.createElement('div');
+            categoryDiv.className = 'category';
+            categoryDiv.innerHTML = `
+                <div class="category-header" onclick="toggleCategory(this.parentElement)">
+                    <div>
+                        <div class="category-title">${category}</div>
+                        <div class="category-description">${data.description}</div>
+                    </div>
+                    <div class="category-toggle">▼</div>
+                </div>
+                <div class="category-content">
+                    <button class="select-all-btn" onclick="toggleAllSkills('${category}', event)">
+                        Alle auswählen
+                    </button>
+                    ${data.skills.map(skill => `
+                        <div class="skill-item" onclick="toggleSkill('${category}', '${skill.replace(/'/g, "\\'")}')">
+                            <input type="checkbox" class="skill-checkbox" id="${generateSkillId(category, skill)}">
+                            <div class="skill-text">${skill}</div>
+                            <div class="price-tag">€${skillPricing[category]}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            return categoryDiv;
+        }
+
+        function toggleCategory(categoryElement) {
+            categoryElement.classList.toggle('expanded');
+        }
+
+        function toggleSkill(category, skill) {
+            const skillId = generateSkillId(category, skill);
+            const checkbox = document.getElementById(skillId);
+            const skillItem = checkbox.parentElement;
+            
+            if (selectedSkills.has(skillId)) {
+                selectedSkills.delete(skillId);
+                skillItem.classList.remove('selected');
+                checkbox.checked = false;
+                // Only show notification for removal if more than 1 skill
+                if (selectedSkills.size > 0) {
+                    showNotification('Skill entfernt', 'error');
+                }
+            } else {
+                selectedSkills.add(skillId);
+                skillItem.classList.add('selected');
+                checkbox.checked = true;
+                // Only show notification for addition if it's not the first skill
+                if (selectedSkills.size > 1) {
+                    showNotification('Skill hinzugefügt', 'success');
+                }
+            }
+            
+            updateCart();
+            updateSelectAllButton(category);
+        }
+
+        function toggleAllSkills(category, event) {
+            event.stopPropagation();
+            const categoryElement = event.target.closest('.category');
+            const selectAllBtn = event.target;
+            const skillItems = categoryElement.querySelectorAll('.skill-item');
+            const isAllSelected = Array.from(skillItems).every(item => 
+                item.classList.contains('selected')
+            );
+            
+            if (isAllSelected) {
+                // Alle abwählen
+                skillItems.forEach(item => {
+                    const checkbox = item.querySelector('.skill-checkbox');
+                    const skillId = checkbox.id;
+                    selectedSkills.delete(skillId);
+                    item.classList.remove('selected');
+                    checkbox.checked = false;
+                });
+                selectAllBtn.textContent = 'Alle auswählen';
+                selectAllBtn.classList.remove('selected');
+                showNotification(`${skillItems.length} Skills abgewählt`, 'error');
+            } else {
+                // Alle auswählen
+                skillItems.forEach(item => {
+                    const checkbox = item.querySelector('.skill-checkbox');
+                    const skillId = checkbox.id;
+                    selectedSkills.add(skillId);
+                    item.classList.add('selected');
+                    checkbox.checked = true;
+                });
+                selectAllBtn.textContent = 'Alle abwählen';
+                selectAllBtn.classList.add('selected');
+                showNotification(`${skillItems.length} Skills ausgewählt`, 'success');
+            }
+            
+            updateCart();
+        }
+
+        function updateSelectAllButton(category) {
+            // Find category element by looking for the category title
+            const categoryElements = document.querySelectorAll('.category');
+            let categoryElement = null;
+            
+            for (let element of categoryElements) {
+                const titleElement = element.querySelector('.category-title');
+                if (titleElement && titleElement.textContent === category) {
+                    categoryElement = element;
+                    break;
+                }
+            }
+            
+            if (!categoryElement) return;
+            
+            const selectAllBtn = categoryElement.querySelector('.select-all-btn');
+            const skillItems = categoryElement.querySelectorAll('.skill-item');
+            const isAllSelected = Array.from(skillItems).every(item => 
+                item.classList.contains('selected')
+            );
+            
+            if (isAllSelected) {
+                selectAllBtn.textContent = 'Alle abwählen';
+                selectAllBtn.classList.add('selected');
+            } else {
+                selectAllBtn.textContent = 'Alle auswählen';
+                selectAllBtn.classList.remove('selected');
+            }
+        }
+
+        function updateCart() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartTotalElement = document.getElementById('cart-total');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            
+            cartItems = [];
+            let total = 0;
+            
+            selectedSkills.forEach(skillId => {
+                const [category, skillName] = skillId.split('-');
+                const fullCategory = Object.keys(skillCategories).find(cat => cat.startsWith(category));
+                const skill = skillCategories[fullCategory].skills.find(s => 
+                    generateSkillId(fullCategory, s) === skillId
+                );
+                
+                if (skill) {
+                    cartItems.push({
+                        category: fullCategory,
+                        skill: skill,
+                        price: skillPricing[fullCategory]
+                    });
+                    total += skillPricing[fullCategory];
+                }
+            });
+            
+            if (cartItems.length === 0) {
+                cartItemsContainer.innerHTML = '<div class="empty-cart">Noch keine Skills ausgewählt</div>';
+            } else {
+                // Group items by category
+                const groupedItems = {};
+                cartItems.forEach(item => {
+                    if (!groupedItems[item.category]) {
+                        groupedItems[item.category] = [];
+                    }
+                    groupedItems[item.category].push(item);
+                });
+                
+                // Generate HTML for grouped items
+                const groupedHTML = Object.entries(groupedItems).map(([category, items]) => {
+                    const categoryTotal = items.reduce((sum, item) => sum + item.price, 0);
+                    return `
+                        <div class="cart-category-group">
+                            <div class="cart-category-header">
+                                <span>${category}</span>
+                                <span class="cart-category-count">${items.length}</span>
+                            </div>
+                            ${items.map((item, index) => {
+                                const isInDiscountGroup = Math.floor(index / 5) < discountGroups;
+                                const originalPrice = item.price;
+                                const discountedPrice = isInDiscountGroup ? originalPrice * 0.95 : originalPrice;
+                                
+                                return `
+                                    <div class="cart-item">
+                                        <div class="cart-item-info">
+                                            <div class="cart-item-title">${item.skill.split(':')[0]}</div>
+                                            <div class="cart-item-category">${item.category}</div>
+                                        </div>
+                                        <div class="cart-item-price">
+                                            ${isInDiscountGroup ? 
+                                                `<span class="original-price">€${originalPrice.toLocaleString('de-DE')}</span>` : 
+                                                ''
+                                            }
+                                            <span class="final-price">€${Math.round(discountedPrice).toLocaleString('de-DE')}</span>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    `;
+                }).join('');
+                
+                cartItemsContainer.innerHTML = groupedHTML;
+            }
+            
+            // Calculate discount: 5% for every 5 skills (cumulative)
+            const discountGroups = Math.floor(selectedSkills.size / 5);
+            
+            // Calculate discount based on the actual prices of the selected skills
+            let discount = 0;
+            if (discountGroups > 0) {
+                // Get the actual prices of selected skills
+                const skillPrices = [];
+                selectedSkills.forEach(skillId => {
+                    const [category, skillName] = skillId.split('-');
+                    const fullCategory = Object.keys(skillCategories).find(cat => cat.startsWith(category));
+                    if (fullCategory) {
+                        skillPrices.push(skillPricing[fullCategory]);
+                    }
+                });
+                
+                // Sort prices to get the most expensive skills for discount
+                skillPrices.sort((a, b) => b - a);
+                
+                // Calculate discount for each group of 5 skills
+                for (let i = 0; i < discountGroups; i++) {
+                    const startIndex = i * 5;
+                    const endIndex = Math.min(startIndex + 5, skillPrices.length);
+                    const groupTotal = skillPrices.slice(startIndex, endIndex).reduce((sum, price) => sum + price, 0);
+                    discount += groupTotal * 0.05;
+                }
+            }
+            
+            const finalTotal = total - discount;
+            
+            console.log('Debug discount calculation:');
+            console.log('- Selected skills:', selectedSkills.size);
+            console.log('- Total before discount:', total);
+            console.log('- Discount groups:', discountGroups);
+            console.log('- Discount amount:', discount);
+            console.log('- Final total:', finalTotal);
+            
+            console.log('Selected skills:', selectedSkills.size);
+            console.log('Discount groups (every 5 skills):', discountGroups);
+            console.log('Total before discount:', total);
+            console.log('Discount:', discount);
+            console.log('Final total:', finalTotal);
+            
+            // Update total display
+            const nextDiscountThreshold = Math.ceil(selectedSkills.size / 5) * 5;
+            const skillsToNextDiscount = nextDiscountThreshold - selectedSkills.size;
+            
+            console.log('Progress calculation:');
+            console.log('- Selected skills:', selectedSkills.size);
+            console.log('- Current discount groups:', discountGroups);
+            console.log('- Next threshold:', nextDiscountThreshold);
+            console.log('- Skills to next discount:', skillsToNextDiscount);
+            
+            // Update discount progress container
+            const discountProgressContainer = document.getElementById('discount-progress-container');
+            
+            if (discount > 0) {
+                cartTotalElement.innerHTML = `
+                    <div class="cart-subtotal">
+                        <span>Zwischensumme:</span>
+                        <span>€${total.toLocaleString('de-DE')}</span>
+                    </div>
+                    <div class="cart-discount">
+                        <span class="cart-discount-text">Rabatt (${discountGroups} × 5 Skills = ${discountGroups * 5} Skills):</span>
+                        <span class="cart-discount-amount">-€${Math.round(discount).toLocaleString('de-DE')}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 700; margin-top: 12px;">
+                        <span>Gesamt:</span>
+                        <span>€${Math.round(finalTotal).toLocaleString('de-DE')}</span>
+                    </div>
+                `;
+                
+                // Show progress for next discount level if there are skills to next threshold
+                if (skillsToNextDiscount > 0) {
+                    discountProgressContainer.innerHTML = `
+                        <div class="discount-progress">
+                            <div class="discount-progress-text">
+                                🎯 Noch ${skillsToNextDiscount} Skill${skillsToNextDiscount > 1 ? 's' : ''} für ${discountGroups + 1} × 5% Rabatt!
+                            </div>
+                            <div class="discount-progress-bar">
+                                <div class="discount-progress-fill" style="width: ${(selectedSkills.size % 5) * 20}%"></div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    discountProgressContainer.innerHTML = '';
+                }
+            } else {
+                cartTotalElement.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 700;">
+                        <span>Gesamt:</span>
+                        <span>€${total.toLocaleString('de-DE')}</span>
+                    </div>
+                `;
+                discountProgressContainer.innerHTML = `
+                    <div class="discount-progress">
+                        <div class="discount-progress-text">
+                            ${skillsToNextDiscount > 0 
+                                ? `🎯 Noch ${skillsToNextDiscount} Skill${skillsToNextDiscount > 1 ? 's' : ''} für ${discountGroups + 1} × 5% Rabatt!` 
+                                : '🎉 Nächster Rabatt erreicht!'
+                            }
+                        </div>
+                        <div class="discount-progress-bar">
+                            <div class="discount-progress-fill" style="width: ${(selectedSkills.size % 5) * 20}%"></div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            checkoutBtn.disabled = cartItems.length === 0;
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            // Auto-hide after 2 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 2000);
+        }
+
+        function checkout() {
+            if (cartItems.length === 0) return;
+            
+            const discountGroups = Math.floor(selectedSkills.size / 5);
+            const subtotal = cartItems.reduce((sum, item) => sum + item.price, 0);
+            const discount = discountGroups * (subtotal * 0.05);
+            const finalTotal = subtotal - discount;
+            
+            const discountText = discount > 0 ? ` (inkl. €${Math.round(discount).toLocaleString('de-DE')} Rabatt)` : '';
+            const message = `Buchung erfolgreich! ${cartItems.length} Skills für €${Math.round(finalTotal).toLocaleString('de-DE')}${discountText} gebucht.`;
+            showNotification(message);
+            
+            // Reset cart
+            selectedSkills.clear();
+            cartItems = [];
+            updateCart();
+            
+            // Uncheck all checkboxes
+            document.querySelectorAll('.skill-checkbox').forEach(checkbox => {
+                checkbox.checked = false;
+                checkbox.parentElement.classList.remove('selected');
+            });
+            
+            // Reset select all buttons
+            document.querySelectorAll('.select-all-btn').forEach(btn => {
+                btn.textContent = 'Alle auswählen';
+                btn.classList.remove('selected');
+            });
+        }
+
+        // Initialize the page
+        function init() {
+            const categoriesContainer = document.getElementById('skill-categories');
+            
+            Object.entries(skillCategories).forEach(([category, data]) => {
+                const categoryElement = createCategoryElement(category, data);
+                categoriesContainer.appendChild(categoryElement);
+            });
+            
+            // Expand first category by default
+            const firstCategory = categoriesContainer.firstElementChild;
+            if (firstCategory) {
+                firstCategory.classList.add('expanded');
+            }
+            
+            document.getElementById('checkout-btn').addEventListener('click', checkout);
+        }
+
+        // Start the application
+        init();
+    </script>
+</body>
+</html> 
