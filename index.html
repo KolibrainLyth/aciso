@@ -326,10 +326,6 @@
         }
 
         .cart-total {
-            display: flex;
-            justify-content: space-between;
-            font-size: 1.2rem;
-            font-weight: 700;
             margin-bottom: 24px;
             color: #1a1a1a;
             padding: 16px;
@@ -580,9 +576,11 @@
                 <div class="empty-cart">Noch keine Skills ausgewählt</div>
             </div>
             <div class="cart-summary">
-                <div class="cart-total">
-                    <span>Gesamt:</span>
-                    <span id="cart-total">€0</span>
+                <div id="cart-total" class="cart-total">
+                    <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 700;">
+                        <span>Gesamt:</span>
+                        <span>€0</span>
+                    </div>
                 </div>
                 <button id="checkout-btn" class="checkout-btn" disabled>
                     Jetzt buchen
@@ -611,7 +609,6 @@
                     "Proaktives Mahnwesen: Alf initiiert Mahnverfahren bei ausstehenden Beiträgen in Magicline.",
                     "Berechtigungswesen: Alf automatisiert die Einrichtung von Benutzerrechten für Rollen in Magicline selbstständig und sicher.",
                     "Studio-Website-Integration: Alf automatisiert die Einrichtung der Studio-Website in Magicline.",
-                    "KPI-Analysen: Alf wertet Kennzahlen zu Mitgliedern, Check-Ins, Verträgen, Finanzen und Aktivitäten aus.",
                     "Automatisiertes Reporting: Alf generiert Auswertungen zu Mitgliederbewegungen für einen kontinuierlichen Überblick.",
                     "Qualitätsmanagement: Alf hält Mitgliederdaten kontinuierlich aktuell und geprüft."
                 ]
@@ -656,6 +653,8 @@
                 description: "Automatisierte Buchhaltung und intelligente Analysen",
                 skills: [
                     "Automatische Beitragszuordnung: Alf ordnet eingehende Beiträge basierend auf Mustern automatisch zu.",
+                    "KPI-Analysen: Alf wertet Kennzahlen zu Mitgliedern, Check-Ins, Verträgen, Finanzen und Aktivitäten aus.",
+
                     "Intelligentes Bestandsmanagement: Alf überwacht und steuert den Bestand und löst bei Bedarf Bestellanfragen proaktiv aus.",
                     "Verkaufsanalytik: Detaillierte Analyse von F&B-Verkaufszahlen zur Erkennung von Trends und Optimierung des Sortiments.",
                     "Echtzeitanalyse von Verkaufsempfehlungen: Alf gibt basierend auf Mitgliedsvorlieben F&B-Empfehlungen."
@@ -676,7 +675,9 @@
         let cartItems = [];
 
         function generateSkillId(category, skill) {
-            return `${category}-${skill.substring(0, 20).replace(/[^a-zA-Z0-9]/g, '')}`;
+            // Create a more consistent ID by using the full skill text
+            const cleanSkill = skill.replace(/[^a-zA-Z0-9]/g, '');
+            return `${category}-${cleanSkill}`;
         }
 
         function createCategoryElement(category, data) {
@@ -711,11 +712,14 @@
         }
 
         function toggleSkill(category, skill) {
+            console.log('toggleSkill called with:', category, skill);
             const skillId = generateSkillId(category, skill);
+            console.log('Generated skillId:', skillId);
             const checkbox = document.getElementById(skillId);
             const skillItem = checkbox.parentElement;
             
             if (selectedSkills.has(skillId)) {
+                console.log('Removing skill:', skillId);
                 selectedSkills.delete(skillId);
                 skillItem.classList.remove('selected');
                 checkbox.checked = false;
@@ -724,6 +728,7 @@
                     showNotification('Skill entfernt', 'error');
                 }
             } else {
+                console.log('Adding skill:', skillId);
                 selectedSkills.add(skillId);
                 skillItem.classList.add('selected');
                 checkbox.checked = true;
@@ -733,6 +738,7 @@
                 }
             }
             
+            console.log('Selected skills after toggle:', selectedSkills);
             updateCart();
             updateSelectAllButton(category);
         }
@@ -806,6 +812,10 @@
         }
 
         function updateCart() {
+            console.log('updateCart called');
+            console.log('selectedSkills:', selectedSkills);
+            console.log('selectedSkills.size:', selectedSkills.size);
+            
             const cartItemsContainer = document.getElementById('cart-items');
             const cartTotalElement = document.getElementById('cart-total');
             const checkoutBtn = document.getElementById('checkout-btn');
@@ -814,21 +824,38 @@
             let total = 0;
             
             selectedSkills.forEach(skillId => {
+                console.log('Processing skillId:', skillId);
                 const [category, skillName] = skillId.split('-');
-                const fullCategory = Object.keys(skillCategories).find(cat => cat.startsWith(category));
-                const skill = skillCategories[fullCategory].skills.find(s => 
-                    generateSkillId(fullCategory, s) === skillId
-                );
+                console.log('Split category:', category, 'skillName:', skillName);
                 
-                if (skill) {
-                    cartItems.push({
-                        category: fullCategory,
-                        skill: skill,
-                        price: skillPricing[fullCategory]
+                // Find the full category name
+                const fullCategory = Object.keys(skillCategories).find(cat => cat.startsWith(category));
+                console.log('Found fullCategory:', fullCategory);
+                
+                if (fullCategory) {
+                    // Find the skill by matching the generated ID
+                    const skill = skillCategories[fullCategory].skills.find(s => {
+                        const generatedId = generateSkillId(fullCategory, s);
+                        console.log('Comparing:', generatedId, 'with:', skillId);
+                        return generatedId === skillId;
                     });
-                    total += skillPricing[fullCategory];
+                    
+                    console.log('Found skill:', skill);
+                    
+                    if (skill) {
+                        cartItems.push({
+                            category: fullCategory,
+                            skill: skill,
+                            price: skillPricing[fullCategory]
+                        });
+                        total += skillPricing[fullCategory];
+                        console.log('Added to cart:', fullCategory, skill.substring(0, 50) + '...', skillPricing[fullCategory]);
+                    }
                 }
             });
+            
+            // Calculate discount: 5% for every 5 skills (cumulative)
+            const discountGroups = Math.floor(selectedSkills.size / 5);
             
             if (cartItems.length === 0) {
                 cartItemsContainer.innerHTML = '<div class="empty-cart">Noch keine Skills ausgewählt</div>';
@@ -878,9 +905,6 @@
                 
                 cartItemsContainer.innerHTML = groupedHTML;
             }
-            
-            // Calculate discount: 5% for every 5 skills (cumulative)
-            const discountGroups = Math.floor(selectedSkills.size / 5);
             
             // Calculate discount based on the actual prices of the selected skills
             let discount = 0;
